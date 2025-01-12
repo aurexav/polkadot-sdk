@@ -106,18 +106,25 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-mod benchmarking;
 pub mod legacy;
 pub mod migration;
-#[cfg(test)]
-mod tests;
-mod types;
 pub mod weights;
+
+mod benchmarking;
+mod tests;
+#[cfg(test)]
+mod types;
 
 extern crate alloc;
 
-use crate::types::{AuthorityProperties, Provider, Suffix, Username, UsernameInformation};
+pub use pallet::*;
+pub use types::{
+	Data, IdentityInformationProvider, Judgement, RegistrarIndex, RegistrarInfo, Registration,
+};
+pub use weights::WeightInfo;
+
 use alloc::{boxed::Box, vec::Vec};
+
 use codec::Encode;
 use frame_support::{
 	ensure,
@@ -128,14 +135,11 @@ use frame_support::{
 	BoundedVec,
 };
 use frame_system::pallet_prelude::*;
-pub use pallet::*;
 use sp_runtime::traits::{
 	AppendZerosInput, Hash, IdentifyAccount, Saturating, StaticLookup, Verify, Zero,
 };
-pub use types::{
-	Data, IdentityInformationProvider, Judgement, RegistrarIndex, RegistrarInfo, Registration,
-};
-pub use weights::WeightInfo;
+
+use crate::types::{AuthorityProperties, Provider, Suffix, Username, UsernameInformation};
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
